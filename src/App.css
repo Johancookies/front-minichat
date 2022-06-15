@@ -20,7 +20,7 @@ code {
   padding: 10px;
   display: flex;
   flex-direction: column;
-  width: 50vw;
+  width: 360px;
   margin: auto;
 }
 
@@ -85,6 +85,8 @@ button {
   height: 80vh;
   border-radius: 6px;
   margin-bottom: 10px;
+  padding: 20px;
+  overflow-y: scroll;
 }
 
 .chatFooter {
@@ -116,4 +118,24 @@ button {
 
 .roomContainer span {
   margin-right: 5px;
+}
+
+/* Message */
+
+.messageContainer {
+  width: 100%;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.toRight {
+  justify-content: flex-end;
+}
+
+.message {
+  background-color: #dc143c50;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  max-width: 70%;
 }

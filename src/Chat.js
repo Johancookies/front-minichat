@@ -9,14 +9,11 @@ export default function Chat({ socket, username, room }) {
       room: room,
       author: username,
       message: currentMessage,
-      time:
-        new Date(Date.now()).getHours() +
-        ":" +
-        new Date(Date.now()).getMinutes(),
+      time: new Date(),
     };
-
     await socket.emit("send_message", messageData);
     setMessageList((list) => [...list, messageData]);
+    setCurrentMessage("");
   };
 
   useEffect(() => {
@@ -39,14 +36,28 @@ export default function Chat({ socket, username, room }) {
         </div>
       </div>
       <div className="chatContent">
-        {messageList?.map((messageContent) => (
-          <h6>{messageContent.message}</h6>
+        {messageList?.map((messageContent, x) => (
+          <div
+            key={x}
+            className={`messageContainer ${
+              messageContent.author === username ? "toRight" : ""
+            }`}
+          >
+            <div
+              className={`message ${
+                messageContent.author === username ? "" : ""
+              }`}
+            >
+              <span>{messageContent.message}</span>
+            </div>
+          </div>
         ))}
       </div>
       <div className="chatFooter">
         <input
           type="text"
           placeholder="..."
+          value={currentMessage}
           onChange={(event) => setCurrentMessage(event.target.value)}
         />
         <button
