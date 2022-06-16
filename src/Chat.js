@@ -18,7 +18,9 @@ export default function Chat({ socket, username, room }) {
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      setMessageList((list) => [...list, data]);
+      if (!messageList.includes(data)) {
+        setMessageList((list) => [...list, data]);
+      }
     });
   }, [socket]);
 
