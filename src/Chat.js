@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
@@ -23,6 +24,20 @@ export default function Chat({ socket, username, room }) {
       }
     });
   }, [socket]);
+
+  useEffect(() => {
+    const getRoomChats = async () => {
+      try {
+        const response = await axios.get(
+          `https://5367-191-156-187-94.ngrok.io/chats/${room}`
+        );
+        setMessageList(response.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getRoomChats();
+  }, []);
 
   return (
     <div className="chatContainer">
@@ -50,7 +65,8 @@ export default function Chat({ socket, username, room }) {
                 messageContent.author === username ? "" : ""
               }`}
             >
-              <span>{messageContent.message}</span>
+              <span className="username">{messageContent.author}</span>
+              <i>{messageContent.message}</i>
             </div>
           </div>
         ))}
@@ -61,6 +77,7 @@ export default function Chat({ socket, username, room }) {
           placeholder="..."
           value={currentMessage}
           onChange={(event) => setCurrentMessage(event.target.value)}
+          onKeyPress={(event) => event.key === "Enter" && sendMessage()}
         />
         <button
           className={`${!currentMessage.length > 0 && "disabled"}`}

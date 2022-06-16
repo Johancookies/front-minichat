@@ -87,6 +87,9 @@ button {
   margin-bottom: 10px;
   padding: 20px;
   overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .chatFooter {
@@ -132,10 +135,19 @@ button {
   justify-content: flex-end;
 }
 
+.username {
+  font-size: 10px;
+  margin-bottom: 5px;
+}
+
 .message {
-  background-color: #dc143c50;
+  background-color: #dc143c14;
   padding: 10px;
   border-radius: 4px;
   font-size: 12px;
   max-width: 70%;
+  word-wrap: break-word;
+  text-align: start;
+  display: flex;
+  flex-direction: column;
 }

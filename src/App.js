@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import Chat from "./Chat";
 
 // connection
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect("https://5367-191-156-187-94.ngrok.io/");
 
 function App() {
   const [username, setUsername] = useState("");
