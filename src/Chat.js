@@ -29,7 +29,7 @@ export default function Chat({ socket, username, room }) {
     const getRoomChats = async () => {
       try {
         const response = await axios.get(
-          `https://5367-191-156-187-94.ngrok.io/chats/${room}`
+          `http://172.28.60.15:3001/chats/${room}`
         );
         setMessageList(response.data.data);
       } catch (err) {
