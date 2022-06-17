@@ -2,13 +2,14 @@ import "./App.css";
 import { useState } from "react";
 import io from "socket.io-client";
 import Chat from "./Chat";
+import { IconBT } from "./icons";
 
 // connection
-const socket = io.connect("http://172.28.60.15:3001/");
+const socket = io.connect("https://back-real-time-chat.herokuapp.com/");
 
 function App() {
   const [username, setUsername] = useState("");
-  const [room, setRoom] = useState("");
+  const [room, setRoom] = useState(1);
   const [showChat, setShowChat] = useState(false);
 
   const joinRoom = () => {
@@ -19,25 +20,27 @@ function App() {
   return (
     <div className="app">
       {!showChat ? (
-        <>
-          <h1>Minichat</h1>
+        <div className="entranceContainer">
+          <div className="appName">
+            <IconBT size={60} />
+          </div>
           <input
-            placeholder="Name..."
+            className="logInput"
+            placeholder="Nombre..."
             onChange={(event) => setUsername(event.target.value)}
+            onKeyPress={(event) => event.key === "Enter" && joinRoom()}
           />
-          <input
+          {/* <input
             placeholder="Room..."
             onChange={(event) => setRoom(event.target.value)}
-          />
+          /> */}
           <button
-            className={`${
-              !(room.length > 0 && username.length > 0) && "disabled"
-            }`}
+            className={`${!(username.length > 0) && "disabled"}`}
             onClick={() => joinRoom()}
           >
-            {"Join Room"}
+            {"¡Chat!"}
           </button>
-        </>
+        </div>
       ) : (
         <Chat socket={socket} username={username} room={room} />
       )}

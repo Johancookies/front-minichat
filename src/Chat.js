@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import axios from "axios";
+import ScrollToBottom from "react-scroll-to-bottom";
 
 export default function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
@@ -10,11 +11,12 @@ export default function Chat({ socket, username, room }) {
       room: room,
       author: username,
       message: currentMessage,
-      time: new Date(),
+      time: toString(new Date()),
     };
     await socket.emit("send_message", messageData);
     setMessageList((list) => [...list, messageData]);
     setCurrentMessage("");
+    window.scrollTo(0, document.body.scrollHeight);
   };
 
   useEffect(() => {
@@ -25,34 +27,38 @@ export default function Chat({ socket, username, room }) {
     });
   }, [socket]);
 
-  useEffect(() => {
-    const getRoomChats = async () => {
-      try {
-        const response = await axios.get(
-          `http://172.28.60.15:3001/chats/${room}`
-        );
-        setMessageList(response.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getRoomChats();
-  }, []);
+  // useLayoutEffect(() => {
+  //   const getRoomChats = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://172.28.60.15:3001/chats/${room}`
+  //       );
+  //       setMessageList(response.data.data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   getRoomChats();
+  // }, []);
+
+  // useEffect(() => {
+  //   window.scrollTo(0, document.body.scrollHeight);
+  // }, []);
 
   return (
     <div className="chatContainer">
       <div className="roomContainer">
-        <div>
-          <span>&#9786;</span>
-          {username}
+        <div className="userOnline">
+          <div className="indicator"></div>
+          <span>{username}</span>
         </div>
-        <span>&#9762;</span>
-        <div>
-          <span>&#9773;</span>
-          {room}
+        <div className="roomNumber">
+          <b>{room}</b>
         </div>
       </div>
+
       <div className="chatContent">
+        {/* <ScrollToBottom className="scrollToBottom"> */}
         {messageList?.map((messageContent, x) => (
           <div
             key={x}
@@ -62,15 +68,17 @@ export default function Chat({ socket, username, room }) {
           >
             <div
               className={`message ${
-                messageContent.author === username ? "" : ""
+                messageContent.author === username ? "currentUser" : ""
               }`}
             >
-              <span className="username">{messageContent.author}</span>
-              <i>{messageContent.message}</i>
+              <span className="author">{messageContent.author}</span>
+              <span>{messageContent.message}</span>
             </div>
           </div>
         ))}
+        {/* </ScrollToBottom> */}
       </div>
+
       <div className="chatFooter">
         <input
           type="text"
@@ -79,12 +87,12 @@ export default function Chat({ socket, username, room }) {
           onChange={(event) => setCurrentMessage(event.target.value)}
           onKeyPress={(event) => event.key === "Enter" && sendMessage()}
         />
-        <button
-          className={`${!currentMessage.length > 0 && "disabled"}`}
+        <div
+          className={`sendButton ${!currentMessage.length > 0 && "disabled"}`}
           onClick={() => sendMessage()}
         >
           &#9658;
-        </button>
+        </div>
       </div>
     </div>
   );
