@@ -136,7 +136,7 @@ button {
 .roomNumber {
   background-color: #3c3c3b;
   border-radius: 8px;
-  padding: 2px 15px 4px 15px;
+  padding: 5px 15px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -155,7 +155,6 @@ button {
 
 .chatContent {
   padding: 20px 0px;
-  height: 100%;
 }
 
 .scroll {
@@ -185,7 +184,7 @@ button {
   padding: 10px;
   border-radius: 10px;
   font-size: 12px;
-  max-width: 60%;
+  max-width: 69%;
   word-wrap: break-word;
   text-align: start;
   background-color: #ffffff;
