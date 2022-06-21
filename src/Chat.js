@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ScrollToBottom from "react-scroll-to-bottom";
 import useIndexedDB from "./useIndexedDB";
+import { ArrowIcon } from "./icons";
 
 export default function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
@@ -34,7 +35,7 @@ export default function Chat({ socket, username, room }) {
   useEffect(() => {
     setCurrentRoom(room);
     setMessageList(currentMessages);
-    console.log(currentMessages);
+    window.scrollTo(0, document.body.scrollHeight);
   }, [currentMessages]);
 
   return (
@@ -85,7 +86,7 @@ export default function Chat({ socket, username, room }) {
             sendMessage();
           }}
         >
-          &#9658;
+          <ArrowIcon size={18} />
         </div>
       </div>
     </div>

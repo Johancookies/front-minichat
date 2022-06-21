@@ -3,6 +3,7 @@ import { useState } from "react";
 import io from "socket.io-client";
 import Chat from "./Chat";
 import { IconBT } from "./icons";
+import ServicesList from "./ServicesList";
 
 // connection
 const socket = io.connect("https://back-real-time-chat.herokuapp.com/");
@@ -40,6 +41,7 @@ function App() {
           >
             {"¡Chat!"}
           </button>
+          <ServicesList />
         </div>
       ) : (
         <Chat socket={socket} username={username} room={room} />
