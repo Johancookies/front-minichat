@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import ScrollToBottom from "react-scroll-to-bottom";
 import useIndexedDB from "./useIndexedDB";
 import { ArrowIcon } from "./icons";
 
@@ -10,14 +9,19 @@ export default function Chat({ socket, username, room }) {
   const { handleStoreLocalMessage, currentMessages, setCurrentRoom } =
     useIndexedDB();
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     const messageData = {
-      room: room,
+      id_channel: room,
       author: username,
       content: currentMessage,
     };
-    socket.emit("send_message", messageData);
-    handleStoreLocalMessage(messageData);
+    // socket.emit("send_message", messageData);
+    const response = await axios.post(
+      `${process.env.REACT_APP_PUBLIC_API}messages`,
+      messageData
+    );
+
+    // handleStoreLocalMessage(messageData);
     setMessageList((list) => [...list, messageData]);
     setCurrentMessage("");
     window.scrollTo(0, document.body.scrollHeight);
@@ -25,8 +29,10 @@ export default function Chat({ socket, username, room }) {
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
+      console(data);
       if (!messageList.includes(data)) {
-        handleStoreLocalMessage(data);
+        console.log(data);
+        // handleStoreLocalMessage(data);
         setMessageList((list) => [...list, data]);
       }
     });
