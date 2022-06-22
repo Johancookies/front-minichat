@@ -20,18 +20,18 @@ export default function Chat({ socket, username, room }) {
       `${process.env.REACT_APP_PUBLIC_API}messages`,
       messageData
     );
-
-    // handleStoreLocalMessage(messageData);
-    setMessageList((list) => [...list, messageData]);
-    setCurrentMessage("");
-    window.scrollTo(0, document.body.scrollHeight);
+    if (response.status === 200) {
+      // handleStoreLocalMessage(messageData);
+      // setMessageList((list) => [...list, messageData]);
+      setCurrentMessage("");
+    }
   };
 
   useEffect(() => {
+    console.log("socket updated");
     socket.on("receive_message", (data) => {
-      console(data);
-      if (!messageList.includes(data)) {
-        console.log(data);
+      console.log(data);
+      if (!messageList.some((item) => item.id === data.id)) {
         // handleStoreLocalMessage(data);
         setMessageList((list) => [...list, data]);
       }
@@ -39,6 +39,15 @@ export default function Chat({ socket, username, room }) {
   }, [socket]);
 
   useEffect(() => {
+    const getMessages = async () => {
+      const response = await axios.get(
+        `${process.env.REACT_APP_PUBLIC_API}messages/by-channel?id_channel=${room}`
+      );
+      if (response.data.data) {
+        setMessageList(response.data.data)
+      }
+    }
+    getMessages()
     setCurrentRoom(room);
     setMessageList(currentMessages);
     window.scrollTo(0, document.body.scrollHeight);
@@ -48,7 +57,7 @@ export default function Chat({ socket, username, room }) {
     <div className="chatContainer">
       <div className="roomContainer">
         <div className="userOnline">
-          <div className="indicator" />
+          <div className={`indicator ${socket.connected ? "connected" : ""}`} />
           <span>{username}</span>
         </div>
         <div className="roomNumber">
