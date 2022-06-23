@@ -11,7 +11,7 @@ import MeetingsList from "./MeetingsList";
 const socket = io.connect(process.env.REACT_APP_PUBLIC_API);
 
 function App() {
-  const [username, setUsername] = useState(1);
+  const [username, setUsername] = useState(20);
   const [room, setRoom] = useState(1);
   const [showChat, setShowChat] = useState(false);
 
@@ -19,9 +19,7 @@ function App() {
     const verifyChannel = async () => {
       try {
         const response = await axios.get(
-          `${
-            process.env.REACT_APP_PUBLIC_API
-          }channels?id_user=${username}&id_service_line=${id_product}`
+          `${process.env.REACT_APP_PUBLIC_API}channels?id_user=${username}&id_service_line=${id_product}`
         );
         if (response.data.id_channel) {
           const auxRoom = response.data.id_channel;
